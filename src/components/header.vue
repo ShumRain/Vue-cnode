@@ -2,7 +2,9 @@
 	<header>
 		<nav>
 			<div class="logo">
-				<img src="//o4j806krb.qnssl.com/public/images/cnodejs_light.svg">
+				<router-link to="/">
+					<img src="//o4j806krb.qnssl.com/public/images/cnodejs_light.svg">
+				</router-link>
 			</div>
 		</nav>
 	</header>

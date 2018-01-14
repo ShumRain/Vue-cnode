@@ -4,7 +4,7 @@
 			<div v-for="item of topicItems" class="topic-item" :key="item.id">
 				<div class="topic-item-header">
 					<h2 class="topic-item-title">
-						<router-link to="melo.vc">{{ item.title }}</router-link>
+						<router-link :to="{name: 'articleRoute', params: {id: item.id}}">{{ item.title }}</router-link>
 					</h2>
 					<div class="topic-item-tag">{{ item.tab }}</div>
 				</div>
@@ -107,13 +107,6 @@
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
-		.point {
-			width: 3px;
-			height: 3px;
-			border-radius: 50%;
-			background: #565b65;
-			margin: 0 5px;
-		}
 		img  {
 			width: 25px;
 			height: 25px;

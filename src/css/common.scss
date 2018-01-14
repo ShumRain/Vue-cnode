@@ -8,14 +8,41 @@
 
 html { font-size: 14px; }
 
+body {
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	line-height: 1.9rem;
+	color: #333;
+}
+
 li {
     list-style: none;
 }
 
 a {
-    color: $link-color;
+    color: #08c;
     text-decoration: none;
     &:hover {
-        color: $link-color;
+		text-decoration: underline;
     }
+}
+
+code {
+    letter-spacing: 0;
+    padding: 0 0.5em;
+    border-radius: .15em;
+    background-color: rgba(0, 0, 0, 0.05);
+    margin: 0 .4em;
+    font-family: "Roboto Mono", "Menlo", "Consolas", monospace;
+}
+
+.point {
+	display: inline-block;
+	vertical-align: middle;
+	width: 3px;
+	height: 3px;
+	border-radius: 50%;
+	background: #565b65;
+	margin: 0 5px;
 }
