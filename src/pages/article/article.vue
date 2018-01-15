@@ -3,9 +3,12 @@
 		<div class="article-header">
 			<h1>{{ article.title }}</h1>
 			<div class="article-info">
-				<span>发布于3天前</span>
+				<span>{{ getTime(article.create_at) }}</span>
 				<span class="point"></span>
-				<span>作者{{ article.author.loginname }}</span>
+				<span>
+					作者
+					<router-link :to="{name: 'userRoute', params: {loginname: article.author.loginname}}">{{ article.author.loginname }}</router-link>
+				</span>
 				<span class="point"></span>
 				<span>{{ article.visit_count }}次浏览</span>
 				<span class="point"></span>
@@ -16,13 +19,16 @@
 			<div v-html="article.content"></div>
 		</div>
 		<div class="article-comment">
+			<div class="comment-title">
+				<span>评论区</span><span class="comment-count">{{ article.reply_count }}</span>
+			</div>
 			<div class="comment-item" v-for="reply of article.replies" :key="reply.id">
-				<div><img :src="reply.author.avatar_url"></div>
+				<router-link :to="{name: 'userRoute', params: {loginname: reply.author.loginname}}"><img :src="reply.author.avatar_url"></router-link>
 				<div>
 					<div class="comment-header">
-						<a href="melo.vc">{{ reply.author.loginname }}</a>
+						<router-link :to="{name: 'userRoute', params: {loginname: reply.author.loginname}}">{{ reply.author.loginname }}</router-link>
 						<span class="point"></span>
-						<span>1天前</span>
+						<span>{{ getTime(reply.create_at) }}</span>
 					</div>
 					<div v-html="reply.content" class="comment-body"></div>
 					<div class="comment-footer">
@@ -38,6 +44,8 @@
 
 
 <script>
+	import getTime from 'js/getTime.js'
+
 	export default {
 		data() {
 			return {
@@ -64,13 +72,12 @@
 			.catch((err) => {
 				console.log(err)
 			})
+		},
+		methods: {
+			getTime,
 		}
 	}
 </script>
-
-<style>
-</style>
-
 
 <style lang="scss">
 	@import '~css/markdown.scss';
@@ -98,8 +105,22 @@
 	}
 
 	.article-content {
+		padding-bottom: 10px;
+	}
+
+	.article-comment {
+		padding-top: 10px;
+	}
+
+	.comment-title {
+		padding-bottom: 5px;
+		font-size: 16px;
 		border-bottom: 1px solid #d6d6d6;
-		padding-bottom: 20px;
+	}
+
+	.comment-count {
+		margin-left: 4px;
+		font-size: 12px;
 	}
 
 	.comment-item {

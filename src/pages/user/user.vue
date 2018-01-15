@@ -1,23 +1,43 @@
 <template>
 	<section>
-		<div class="topic-list">
-			<div v-for="item of topicItems" class="topic-item" :key="item.id">
-				<div class="topic-item-header">
-					<h2 class="topic-item-title">
+		<div>
+			<div>
+				<img :src="user.avatar_url">
+				<h2>{{ user.loginname }}</h2>
+			</div>
+			<div>
+				<p>注册时间 {{ getTime(user.create_at) }} </p>
+			</div>
+		</div>
+
+		<div>
+			<h3>最近回复</h3>
+			<div v-for="item in user.recent_replies" class="list-item" :key="item.id">
+				<div class="list-item-header">
+					<h2 class="list-item-title">
 						<router-link :to="{name: 'articleRoute', params: {id: item.id}}">{{ item.title }}</router-link>
 					</h2>
-					<div class="topic-item-tag">{{ item.tab }}</div>
 				</div>
-				<div class="topic-item-footer">
+				<div class="list-item-footer">
+					<router-link :to="{name: 'userRoute', params: {loginname: item.author.loginname}}"><img :src="item.author.avatar_url"></router-link>
+					<div class="point"></div>
+					<span>{{ getTime(item.last_reply_at) }}</span>		
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<h3>最近创建</h3>
+			<div v-for="item of user.recent_topics" class="list-item" :key="item.id">
+				<div class="list-item-header">
+					<h2 class="list-item-title">
+						<router-link :to="{name: 'articleRoute', params: {id: item.id}}">{{ item.title }}</router-link>
+					</h2>
+				</div>
+				<div class="list-item-footer">
 					<router-link :to="{name: 'userRoute', params: {loginname: item.author.loginname}}"><img :src="item.author.avatar_url"></router-link>
 					<div class="point"></div>
 					<span>{{ getTime(item.last_reply_at) }}</span>
-					<div class="point"></div>
-					<div>
-						<span class="reply-count">{{ item.reply_count }}</span>
-						/
-						<span class="visit-count">{{ item.visit_count }}</span>
-					</div>			
 				</div>
 			</div>
 		</div>
@@ -30,23 +50,25 @@
 	export default {
 		data() {
 			return {
-				topicItems: []
+				user: {
+					loginname: '',
+					avatar_url: '',
+					created_at: '',
+					score: '',
+					recent_replices: [],
+					recent_topics: []
+				}
 			}
 		},
 		created() {
-			this.axios.get('https://cnodejs.org/api/v1/topics', {
-				params: {
-					page: 1,
-					limit: 10,
-					merender: 'false'
-				}
-			})
+			let path = this.$route.path
+			this.axios.get(`https://cnodejs.org/api/v1${path}`)
 			.then((res) => {
-				console.log(res)
-				this.topicItems = res.data.data
+				this.user = res.data.data
+				console.log(this.user)
 			})
 			.catch((err) => {
-				console.log('index: ', err)
+				console.log('user: ', err)
 			})
 		},
 		methods: {
@@ -61,13 +83,13 @@
 		margin: 20px auto 0;
 	}
 
-	.topic-list {
+	.list-list {
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 	}
 
-	.topic-item {
+	.list-item {
 		padding: 15px 10px;
 		border-radius: 3px;
 		&:hover {
@@ -78,13 +100,13 @@
 		}
 	}
 
-	.topic-item-header {
+	.list-item-header {
 		display: flex;
 		justify-content: space-between;
 		margin-bottom: 8px;
 	}
 
-	.topic-item-title {
+	.list-item-title {
 		width: 80%;
 		font-size: 16px;
 		line-height: 1.4;
@@ -97,7 +119,7 @@
 		}
 	}
 
-	.topic-item-tag {
+	.list-item-tag {
 		margin: 0 3px;
 		font-size: 13px;
 		color: #565b65;
@@ -108,7 +130,7 @@
 		line-height: 1.4;
 	}
 
-	.topic-item-footer {
+	.list-item-footer {
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
