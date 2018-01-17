@@ -3,7 +3,9 @@
 		<commonHeader></commonHeader>
 		<loading :show="isLoading"></loading>
 		<transition :name="transitionName">
-			<router-view class="child-view"></router-view>
+			<keep-alive include="home">
+				<router-view class="child-view"></router-view>
+			</keep-alive>
 		</transition>
 	</div>
 </template>
@@ -27,7 +29,7 @@
 		mounted() {
 			setTimeout(() => {
 				this.isLoading = false
-			}, 300)
+			}, 500)
 		},
 		watch: {
 			'$route' (to, from) {
@@ -43,8 +45,14 @@
 <style lang="scss">
 	@import '~css/common.scss';
 
+	#app {
+		height: 100%;
+	}
+
 	.child-view {
-		transition: all .5s cubic-bezier(.55,0,.1,1);
+		height: 100%;
+		opacity: 1;
+		transition: all .3s ease-out;
 	}
 	.slide-left-enter, .slide-right-leave-active {
 		opacity: 0;

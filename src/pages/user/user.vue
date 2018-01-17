@@ -1,5 +1,5 @@
 <template>
-	<section>
+	<section v-if="user">
 		<div class="user-info">
 			<div>
 				<img :src="user.avatar_url">
@@ -51,14 +51,7 @@
 	export default {
 		data() {
 			return {
-				user: {
-					loginname: '',
-					avatar_url: '',
-					created_at: '',
-					score: '',
-					recent_replices: [],
-					recent_topics: []
-				}
+				user: null
 			}
 		},
 		created() {
@@ -66,7 +59,6 @@
 			this.axios.get(`https://cnodejs.org/api/v1${path}`)
 			.then((res) => {
 				this.user = res.data.data
-				console.log(this.user)
 			})
 			.catch((err) => {
 				console.log('user: ', err)
@@ -75,7 +67,7 @@
 		methods: {
 			getTime,
 		},
-		beforeRouteUpdate(to, from, netx) {
+		beforeRouteUpdate(to, from, next) {
 			this.axios.get(`https://cnodejs.org/api/v1${to.path}`)
 			.then((res) => {
 				this.user = res.data.data

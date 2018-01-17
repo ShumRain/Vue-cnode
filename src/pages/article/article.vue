@@ -1,5 +1,5 @@
 <template>
-	<section>
+	<section v-if="article">
 		<div class="article-header">
 			<h1>{{ article.title }}</h1>
 			<div class="article-info">
@@ -49,16 +49,7 @@
 	export default {
 		data() {
 			return {
-				article: {
-					title: '',
-					visit_count: '',
-					tab: '',
-					content: '',
-					author: {
-						loginname: ' ',
-					},
-					replies: []
-				}
+				article: null
 			}
 		},
 		created() {
@@ -69,7 +60,7 @@
 				this.article = res.data.data
 			})
 			.catch((err) => {
-				console.log(err)
+				console.log('article: ' ,err)
 			})
 		},
 		methods: {

@@ -28,29 +28,49 @@
 	import getTime from 'js/getTime.js'
 
 	export default {
+		name: 'home',
 		data() {
 			return {
-				topicItems: []
+				topicItems: [],
+				limit: 0
 			}
 		},
 		created() {
-			this.axios.get('https://cnodejs.org/api/v1/topics', {
-				params: {
-					page: 1,
-					limit: 10,
-					merender: 'false'
-				}
-			})
-			.then((res) => {
-				console.log(res)
-				this.topicItems = res.data.data
-			})
-			.catch((err) => {
-				console.log('index: ', err)
-			})
+			this.getData()
 		},
 		methods: {
 			getTime,
+			getData() {
+				this.limit += 10
+				this.axios.get('https://cnodejs.org/api/v1/topics', {
+					params: {
+						page: 1,
+						limit: this.limit,
+						merender: 'false'
+					}
+				})
+				.then((res) => {
+					console.log(res)
+					this.topicItems = res.data.data
+				})
+				.catch((err) => {
+					console.log('index: ', err)
+				})
+			},
+			scrollLoad() {
+				let html    = document.documentElement,
+					sumH    = html.scrollHeight,
+					viewH   = html.clientHeight,
+					scrollH = html.scrollTop
+				
+				viewH + scrollH >= sumH && this.getData()
+			}
+		},
+		activated() {
+			window.addEventListener('scroll', this.scrollLoad)
+		},
+		deactivated() {
+			window.removeEventListener('scroll', this.scrollLoad)
 		}
 	}
 </script>
