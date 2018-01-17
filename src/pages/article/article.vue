@@ -12,7 +12,7 @@
 				<span class="point"></span>
 				<span>{{ article.visit_count }}次浏览</span>
 				<span class="point"></span>
-				<span>来自{{ article.tab }}</span>
+				<span>来自 {{ tabTranslate(article.tab) }}</span>
 			</div>
 		</div>
 		<div class="article-content">
@@ -45,6 +45,7 @@
 
 <script>
 	import getTime from 'js/getTime.js'
+	import tabTranslate from 'js/tabTranslate.js'
 
 	export default {
 		data() {
@@ -65,6 +66,7 @@
 		},
 		methods: {
 			getTime,
+			tabTranslate
 		}
 	}
 </script>

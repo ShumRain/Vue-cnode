@@ -6,7 +6,11 @@
 					<h2 class="topic-item-title">
 						<router-link :to="{name: 'articleRoute', params: {id: item.id}}">{{ item.title }}</router-link>
 					</h2>
-					<div class="topic-item-tag">{{ item.tab }}</div>
+					<div class="topic-tag">
+						<div class="topic-item-tag topic-top" v-if="item.top">{{ tabTranslate('top') }}</div>
+						<div class="topic-item-tag topic-top" v-if="item.good">{{ tabTranslate('good') }}</div>
+						<div class="topic-item-tag" v-if="!item.good">{{ tabTranslate(item.tab) }}</div>
+					</div>
 				</div>
 				<div class="topic-item-footer">
 					<router-link :to="{name: 'userRoute', params: {loginname: item.author.loginname}}"><img :src="item.author.avatar_url"></router-link>
@@ -26,6 +30,7 @@
 
 <script>
 	import getTime from 'js/getTime.js'
+	import tabTranslate from 'js/tabTranslate.js'
 
 	export default {
 		name: 'home',
@@ -36,17 +41,19 @@
 			}
 		},
 		created() {
-			this.getData()
+			this.getData(this.$route.query.tab)
 		},
 		methods: {
 			getTime,
-			getData() {
+			tabTranslate,
+			getData(tab) {
 				this.limit += 10
 				this.axios.get('https://cnodejs.org/api/v1/topics', {
 					params: {
 						page: 1,
 						limit: this.limit,
-						merender: 'false'
+						tab: tab,
+						merender: 'false',
 					}
 				})
 				.then((res) => {
@@ -63,7 +70,7 @@
 					viewH   = html.clientHeight,
 					scrollH = html.scrollTop
 				
-				viewH + scrollH >= sumH && this.getData()
+				viewH + scrollH >= sumH && this.getData(this.$route.query.tab)
 			}
 		},
 		activated() {
@@ -71,6 +78,11 @@
 		},
 		deactivated() {
 			window.removeEventListener('scroll', this.scrollLoad)
+		},
+		beforeRouteUpdate(to, from, next) {
+			this.limit = 0
+			this.getData(to.query.tab)
+			next()
 		}
 	}
 </script>
@@ -117,6 +129,10 @@
 		}
 	}
 
+	.topic-tag {
+		display: flex;
+	}
+
 	.topic-item-tag {
 		margin: 0 3px;
 		font-size: 13px;
@@ -126,6 +142,11 @@
 		border-radius: 3px;
 		padding: 1px 3px 2px;
 		line-height: 1.4;
+	}
+
+	.topic-item-tag.topic-top {
+		background: #407be0;
+		color: #fff;
 	}
 
 	.topic-item-footer {
