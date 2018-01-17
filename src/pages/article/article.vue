@@ -55,7 +55,7 @@
 					tab: '',
 					content: '',
 					author: {
-						loginname: '',
+						loginname: ' ',
 					},
 					replies: []
 				}
@@ -67,7 +67,6 @@
 			this.axios.get(`https://cnodejs.org/api/v1/${path}`)
 			.then((res) => {
 				this.article = res.data.data
-				console.log(this.article)
 			})
 			.catch((err) => {
 				console.log(err)

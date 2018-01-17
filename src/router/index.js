@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from 'pages/index/index'
-import article from 'pages/article/article'
-import user from 'pages/user/user'
+import Index from 'pages/index/index'
+import Article from 'pages/article/article'
+import User from 'pages/user/user'
 
 Vue.use(Router)
 
@@ -11,15 +11,15 @@ export default new Router({
 		{
 			path: '/',
 			name: 'indexRoute',
-			component: index
+			component: Index
 		}, {
 			path: '/topic/:id',
 			name: 'articleRoute',
-			component: article
+			component: Article
 		}, {
 			path: '/user/:loginname',
 			name: 'userRoute',
-			component: user
+			component: User
 		}
 	]
 })

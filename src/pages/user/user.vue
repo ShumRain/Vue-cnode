@@ -1,17 +1,18 @@
 <template>
 	<section>
-		<div>
+		<div class="user-info">
 			<div>
 				<img :src="user.avatar_url">
-				<h2>{{ user.loginname }}</h2>
 			</div>
 			<div>
+				<h2>{{ user.loginname }}</h2>
 				<p>注册时间 {{ getTime(user.create_at) }} </p>
+				<p>积分：{{ user.score }}</p>
 			</div>
 		</div>
 
 		<div>
-			<h3>最近回复</h3>
+			<h2>最近回复</h2>
 			<div v-for="item in user.recent_replies" class="list-item" :key="item.id">
 				<div class="list-item-header">
 					<h2 class="list-item-title">
@@ -27,7 +28,7 @@
 		</div>
 
 		<div>
-			<h3>最近创建</h3>
+			<h2>最近创建</h2>
 			<div v-for="item of user.recent_topics" class="list-item" :key="item.id">
 				<div class="list-item-header">
 					<h2 class="list-item-title">
@@ -73,6 +74,16 @@
 		},
 		methods: {
 			getTime,
+		},
+		beforeRouteUpdate(to, from, netx) {
+			this.axios.get(`https://cnodejs.org/api/v1${to.path}`)
+			.then((res) => {
+				this.user = res.data.data
+			})
+			.catch((err) => {
+				console.log('user: ', err)
+			})
+			next()
 		}
 	}
 </script>
@@ -83,6 +94,17 @@
 		margin: 20px auto 0;
 	}
 
+	.user-info {
+		display: flex;
+		margin-bottom: 10px;
+		img {
+			width: 120px;
+			height: 120px;
+			border-radius: 3px;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+			margin-right: 10px;
+		}	
+	}
 	.list-list {
 		display: flex;
 		flex-direction: column;
