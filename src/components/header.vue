@@ -11,6 +11,9 @@
 				<li v-for="tab of tabs" :key="tab">
 					<router-link :to="{path: '/', query: {tab: tab}}">{{ tabTranslate(tab) }}</router-link>
 				</li>
+				<li>
+					<router-link to="/login">登录</router-link>
+				</li>
 			</ul>
 		</nav>
 	</header>

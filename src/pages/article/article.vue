@@ -68,13 +68,9 @@
 				console.log('article: ' ,err)
 			})
 		},
-		mounted() {
-			setTimeout(() => {
-				let blocks = Array.from(this.$el.querySelectorAll('pre'))
-				blocks.forEach((i) => {
-					hljs.highlightBlock(i)
-				})
-			}, 500)
+		updated() {
+			let blocks = Array.from(this.$el.querySelectorAll('pre'))
+			blocks.forEach(i => hljs.highlightBlock(i))
 		},
 		methods: {
 			getTime,

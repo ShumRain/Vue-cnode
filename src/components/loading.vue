@@ -1,5 +1,5 @@
 <template>
-	<div class="loading-container" v-show="show">
+	<div class="loading-container" v-show="loadShow">
 		<div class="loading"></div>
 	</div>
 </template>
@@ -7,7 +7,7 @@
 <script>
 	export default {
 		props: {
-			show: Boolean
+			loadShow: Boolean
 		}
 	}
 </script>

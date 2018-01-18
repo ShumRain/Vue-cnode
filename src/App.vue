@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<commonHeader></commonHeader>
-		<loading :show="isLoading"></loading>
+		<loading :loadShow="isLoading"></loading>
 		<transition :name="transitionName">
 			<keep-alive include="home">
 				<router-view class="child-view"></router-view>
@@ -50,7 +50,7 @@
 	}
 
 	.child-view {
-		height: 100%;
+		height: calc(100% - 50px);
 		opacity: 1;
 		transition: all .3s ease-out;
 	}

@@ -1,12 +1,14 @@
 .markdown-text {
 	font-size: 15px;
+	
 	p,blockquote,ul,ol,table,pre,h1,h2,h3,h4,h5,h6 {
-        text-align: justify;
+		text-align: justify;
         margin-bottom: 1.15rem;
         word-break: break-all;
     }
-
+	
 	p {
+		text-align: left;
 		white-space: pre-wrap;
 	}
 
