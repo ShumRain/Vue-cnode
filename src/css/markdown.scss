@@ -6,6 +6,10 @@
         word-break: break-all;
     }
 
+	p {
+		white-space: pre-wrap;
+	}
+
     p,blockquote,table,pre,h1,h2,h3,h4,h5,h6 {
         padding: 0 1.1rem;
     }
@@ -32,15 +36,138 @@
         margin: 0 1.1rem;
         color: #6a737d;
         border-left: 0.25em solid #dfe2e5;
-        p { padding: 0; }
 	}
 	
-	img {
-        display: block;
-        max-width: 100%;
-        height: auto;
-        box-shadow: 0 1px 2px 0 rgba(0,0,0,.3);
-        margin: 0 auto;
-        cursor: zoom-in;
-    }
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+	  
+	td, th {
+		padding: 0;
+	}
+
+	table {
+		display: block;
+		width: 100%;
+		overflow: auto;
+		word-break: normal;
+		word-break: keep-all;
+	}
+	  
+	table th {
+		font-weight: bold;
+	}
+	  
+	table th,
+	table td {
+		padding: 6px 13px;
+		border: 1px solid #ddd;
+	}
+	  
+	table tr {
+		background-color: #fff;
+		border-top: 1px solid #ccc;
+	}
+	  
+	table tr:nth-child(2n) {
+		background-color: #f8f8f8;
+	}
+	
+	pre code {
+		color: inherit;
+		white-space: pre-wrap;
+		background-color: transparent;
+	}
+
+	.hljs {
+		display: block;
+		overflow-x: auto;
+		background: #f7f7f7;
+		font-size: 14px;
+		border-radius: 0;
+		padding: 10px 15px;
+		border: none;
+		border-width: 1px 0;
+		-o-tab-size: 4;
+		-moz-tab-size: 4;
+		tab-size: 4
+	}
+	
+	.hljs,
+	.hljs-subst {
+		color: #434f54;
+	}
+	
+	.hljs-keyword,
+	.hljs-attribute,
+	.hljs-selector-tag,
+	.hljs-doctag,
+	.hljs-name {
+		color: #00979D;
+	}
+	
+	.hljs-built_in,
+	.hljs-literal,
+	.hljs-bullet,
+	.hljs-code,
+	.hljs-addition {
+		color: #D35400;
+	}
+	
+	.hljs-regexp,
+	.hljs-symbol,
+	.hljs-variable,
+	.hljs-template-variable,
+	.hljs-link,
+	.hljs-selector-attr,
+	.hljs-selector-pseudo {
+		color: #00979D;
+	}
+	
+	.hljs-type,
+	.hljs-string,
+	.hljs-selector-id,
+	.hljs-selector-class,
+	.hljs-quote,
+	.hljs-template-tag,
+	.hljs-deletion {
+		color: #005C5F;
+	}
+	
+	.hljs-title,
+	.hljs-section {
+		color: #880000;
+		font-weight: bold;
+	}
+	
+	.hljs-comment {
+		color: rgba(149,165,166,.8);
+	}
+	
+	.hljs-meta-keyword {
+		color: #728E00;
+	}
+	
+	.hljs-meta {
+		color: #728E00;
+		color: #434f54;
+	}
+	
+	.hljs-emphasis {
+		font-style: italic;
+	}
+	
+	.hljs-strong {
+		font-weight: bold;
+	}
+	
+	.hljs-function {
+		color: #728E00;
+	}
+	
+	.hljs-number {
+		color: #8A7B52;  
+	}
+  
 }

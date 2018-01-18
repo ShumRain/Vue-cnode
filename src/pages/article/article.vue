@@ -23,7 +23,7 @@
 				<span>评论区</span><span class="comment-count">{{ article.reply_count }}</span>
 			</div>
 			<div class="comment-item" v-for="reply of article.replies" :key="reply.id">
-				<router-link :to="{name: 'userRoute', params: {loginname: reply.author.loginname}}"><img :src="reply.author.avatar_url"></router-link>
+				<router-link :to="{name: 'userRoute', params: {loginname: reply.author.loginname}}" class="avatar"><img :src="reply.author.avatar_url"></router-link>
 				<div>
 					<div class="comment-header">
 						<router-link :to="{name: 'userRoute', params: {loginname: reply.author.loginname}}">{{ reply.author.loginname }}</router-link>
@@ -32,9 +32,11 @@
 					</div>
 					<div v-html="reply.content" class="comment-body"></div>
 					<div class="comment-footer">
-						<a href="javascript:;"><span>点赞</span></a>
-						<span class="point"></span>
-						<a href="javascript:;"><span>回复</span></a>
+						<a href="javascript:;" @click="clickUp">点赞<span v-show="reply.ups.length > 0">{{ reply.ups.length }}</span></a>
+						<div v-if="false">
+							<span class="point"></span>
+							<a href="javascript:;"><span>回复</span></a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -46,6 +48,7 @@
 <script>
 	import getTime from 'js/getTime.js'
 	import tabTranslate from 'js/tabTranslate.js'
+	import hljs from 'highlight.js'
 
 	export default {
 		data() {
@@ -58,15 +61,27 @@
 
 			this.axios.get(`https://cnodejs.org/api/v1/${path}`)
 			.then((res) => {
+				console.log(res.data.data)
 				this.article = res.data.data
 			})
 			.catch((err) => {
 				console.log('article: ' ,err)
 			})
 		},
+		mounted() {
+			setTimeout(() => {
+				let blocks = Array.from(this.$el.querySelectorAll('pre'))
+				blocks.forEach((i) => {
+					hljs.highlightBlock(i)
+				})
+			}, 500)
+		},
 		methods: {
 			getTime,
-			tabTranslate
+			tabTranslate,
+			clickUp() {
+				alert('请先登录，登录后即可点赞')
+			}
 		}
 	}
 </script>
@@ -98,6 +113,9 @@
 
 	.article-content {
 		padding-bottom: 10px;
+		img {
+			max-width: 100%;
+		}
 	}
 
 	.article-comment {
@@ -123,11 +141,21 @@
 			padding: 0;
 			margin: 0;
 		}
-		img {
+		blockquote {
+			margin: 1rem 0;
+		}
+		.avatar {
+			display: block;
 			width: 48px;
 			height: 48px;
-			border-radius: 3px;
 			margin-right: 12px;
+			padding-top: 6px;
+			img {
+				width: 48px;
+				height: 48px;
+				border-radius: 3px;
+				box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+			}
 		}
 	}
 
@@ -143,7 +171,15 @@
 		}
 	}
 
+	.comment-body {
+		img {
+			vertical-align: middle;
+			max-width: 100%;
+		}
+	}
+
 	.comment-footer {
+		display: flex;
 		a {
 			font-size: 13px;
 			color: #656c7a;
