@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<commonHeader></commonHeader>
-		<loading :loadShow="isLoading"></loading>
+		<loading v-if="isLoading"></loading>
 		<transition :name="transitionName">
 			<keep-alive include="home">
 				<router-view class="child-view"></router-view>
@@ -13,11 +13,11 @@
 <script>
 	import commonHeader from 'components/header'
 	import loading from 'components/loading'
+	import { mapState } from 'vuex'
 
 	export default {
 		data() {
 			return {
-				isLoading: true,
 				transitionName: 'slide-leff'
 			}
 		},
@@ -26,10 +26,10 @@
 			commonHeader,
 			loading,
 		},
-		mounted() {
-			setTimeout(() => {
-				this.isLoading = false
-			}, 500)
+		computed: {
+			...mapState({
+				isLoading: 'isLoading'
+			})
 		},
 		watch: {
 			'$route' (to, from) {

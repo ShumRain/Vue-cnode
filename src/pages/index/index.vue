@@ -36,12 +36,26 @@
 		name: 'home',
 		data() {
 			return {
-				topicItems: [],
+				topicItems: null,
 				limit: 0
 			}
 		},
 		created() {
 			this.getData(this.$route.query.tab)
+		},
+		updated() {
+			this.$store.commit('notLoad')
+		},
+		activated() {
+			window.addEventListener('scroll', this.scrollLoad)
+		},
+		deactivated() {
+			window.removeEventListener('scroll', this.scrollLoad)
+		},
+		beforeRouteUpdate(to, from, next) {
+			this.limit = 0
+			this.getData(to.query.tab)
+			next()
 		},
 		methods: {
 			getTime,
@@ -72,17 +86,6 @@
 				
 				viewH + scrollH >= sumH && this.getData(this.$route.query.tab)
 			}
-		},
-		activated() {
-			window.addEventListener('scroll', this.scrollLoad)
-		},
-		deactivated() {
-			window.removeEventListener('scroll', this.scrollLoad)
-		},
-		beforeRouteUpdate(to, from, next) {
-			this.limit = 0
-			this.getData(to.query.tab)
-			next()
 		}
 	}
 </script>

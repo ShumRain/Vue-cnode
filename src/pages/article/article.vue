@@ -56,6 +56,9 @@
 				article: null
 			}
 		},
+		beforeCreate() {
+			this.$store.commit('load')
+		},
 		created() {
 			let path = this.$route.path
 
@@ -71,6 +74,7 @@
 		updated() {
 			let blocks = Array.from(this.$el.querySelectorAll('pre'))
 			blocks.forEach(i => hljs.highlightBlock(i))
+			this.$store.commit('notLoad')
 		},
 		methods: {
 			getTime,

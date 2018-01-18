@@ -54,6 +54,9 @@
 				user: null
 			}
 		},
+		beforeCreate() {
+			this.$store.commit('load')
+		},
 		created() {
 			let path = this.$route.path
 			this.axios.get(`https://cnodejs.org/api/v1${path}`)
@@ -64,8 +67,8 @@
 				console.log('user: ', err)
 			})
 		},
-		methods: {
-			getTime,
+		updated() {
+			this.$store.commit('notLoad')
 		},
 		beforeRouteUpdate(to, from, next) {
 			this.axios.get(`https://cnodejs.org/api/v1${to.path}`)
@@ -76,7 +79,10 @@
 				console.log('user: ', err)
 			})
 			next()
-		}
+		},
+		methods: {
+			getTime,
+		},
 	}
 </script>
 

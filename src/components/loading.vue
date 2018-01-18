@@ -1,14 +1,11 @@
 <template>
-	<div class="loading-container" v-show="loadShow">
+	<div class="loading-container">
 		<div class="loading"></div>
 	</div>
 </template>
 
 <script>
 	export default {
-		props: {
-			loadShow: Boolean
-		}
 	}
 </script>
 
