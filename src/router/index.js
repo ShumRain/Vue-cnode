@@ -23,8 +23,11 @@ export default new Router({
 			component: User
 		}, {
 			path: '/login',
-			name: 'loginRouter',
+			name: 'loginRoute',
 			component: Login
 		}
-	]
+	],
+	scrollBehavior (to, from, savedPosition) {
+		return { x: 0, y: 0 }
+	}
 })

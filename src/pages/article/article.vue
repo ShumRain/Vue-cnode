@@ -33,7 +33,7 @@
 					<div v-html="reply.content" class="comment-body"></div>
 					<div class="comment-footer">
 						<a href="javascript:;" @click="clickUp">点赞<span v-show="reply.ups.length > 0">{{ reply.ups.length }}</span></a>
-						<div v-if="false">
+						<div v-if="userInfo.loginname">
 							<span class="point"></span>
 							<a href="javascript:;"><span>回复</span></a>
 						</div>
@@ -48,6 +48,7 @@
 <script>
 	import getTime from 'js/getTime.js'
 	import tabTranslate from 'js/tabTranslate.js'
+	import { mapState } from 'vuex'
 	import hljs from 'highlight.js'
 
 	export default {
@@ -82,6 +83,11 @@
 			clickUp() {
 				alert('请先登录，登录后即可点赞')
 			}
+		},
+		computed: {
+			...mapState({
+				userInfo: 'userInfo'
+			})
 		}
 	}
 </script>

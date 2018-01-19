@@ -11,8 +11,13 @@
 				<li v-for="tab of tabs" :key="tab">
 					<router-link :to="{path: '/', query: {tab: tab}}">{{ tabTranslate(tab) }}</router-link>
 				</li>
-				<li>
-					<router-link to="/login">登录</router-link>
+				<li v-if="!userInfo.loginname">
+					<a href="javascript:;" @click="goEnter">登录</a>
+				</li>
+				<li class="login" v-if="userInfo.loginname">
+					<router-link :to="{name: 'userRoute', params: {loginname: userInfo.loginname}}">
+						<img :src="userInfo.avatar_url">
+					</router-link>
 				</li>
 			</ul>
 		</nav>
@@ -21,6 +26,7 @@
 
 <script>
 	import tabTranslate from 'js/tabTranslate.js'
+	import { mapState } from 'vuex'
 
 	export default {
 		data() {
@@ -30,6 +36,19 @@
 		},
 		methods: {
 			tabTranslate,
+			goEnter() {
+				this.$router.push({
+					name: 'loginRoute',
+					query: {
+						redirect: encodeURIComponent(this.$route.path)
+					}
+				})
+			}
+		},
+		computed: {
+			...mapState({
+				userInfo: 'userInfo'
+			})
 		}
 	}
 </script>
@@ -57,6 +76,7 @@
 	
 	.tab {
 		display: flex;
+		align-items: center;
 		li {
 			line-height: 20px;
 			a {
@@ -72,6 +92,15 @@
 					color: #fff;
 				}
 			}
+		}
+	}
+
+	.login {
+		img {
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			vertical-align: middle;
 		}
 	}
 </style>

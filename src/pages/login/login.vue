@@ -14,18 +14,25 @@ export default {
 			accessToken: ''
 		}
 	},
+	mounted() {
+		this.$store.commit('notLoad')
+	},
 	methods: {
 		clickLogin() {
 			if (!this.accessToken) {
 				alert('不能为空')
 				return
 			}
-
 			this.axios.post(`https://cnodejs.org/api/v1/accessToken`, {
 				accesstoken: this.accessToken
 			})
 			.then((res) => {
-				console.log(res)
+				this.$store.dispatch('setUserInfo', res.data)
+				window.sessionStorage.userInfo = JSON.stringify(res.data)
+				let redirect = decodeURIComponent(this.$route.query.redirect || '/')
+				this.$router.push({
+					path: redirect
+				})
 			})
 			.catch((err) => {
 				err.response.status === 401 && 
@@ -33,6 +40,21 @@ export default {
 				console.log('login: ', err)
 			})
 		}
+	},
+	// 登录后 不能进入login页面 跳转user/loginname
+	beforeRouteEnter(to, from, next) {
+		if (window.sessionStorage.userInfo) {
+			next(vm => {
+				vm.$router.push({
+					name: 'userRoute',
+					params: {
+						loginname: JSON.parse(window.sessionStorage.userInfo).loginname
+					}
+				})
+			})
+			return
+		}
+		next()
 	}
 }
 </script>

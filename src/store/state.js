@@ -1,5 +1,6 @@
 const state = {
-	isLoading: true
+	isLoading: true,
+	userInfo: {}
 }
 
 export default state

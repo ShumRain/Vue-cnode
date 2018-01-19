@@ -28,7 +28,7 @@
 		},
 		computed: {
 			...mapState({
-				isLoading: 'isLoading'
+				isLoading: 'isLoading',
 			})
 		},
 		watch: {
