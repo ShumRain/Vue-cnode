@@ -93,7 +93,8 @@
 <style lang="scss" scoped>
 	section {
 		width: 680px;
-		margin: 20px auto 0;
+		margin: 0 auto;
+		padding-top: 20px;
 	}
 
 	.topic-list {

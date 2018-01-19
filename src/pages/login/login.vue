@@ -27,8 +27,14 @@ export default {
 				accesstoken: this.accessToken
 			})
 			.then((res) => {
-				this.$store.dispatch('setUserInfo', res.data)
-				window.sessionStorage.userInfo = JSON.stringify(res.data)
+				let userInfo = {
+					loginname: res.data.loginname,
+					avatar_url: res.data.avatar_url,
+					uid: res.data.id,
+					accessToken: this.accessToken
+				}
+				this.$store.dispatch('setUserInfo', userInfo)
+				window.sessionStorage.userInfo = JSON.stringify(userInfo)
 				let redirect = decodeURIComponent(this.$route.query.redirect || '/')
 				this.$router.push({
 					path: redirect

@@ -50,7 +50,7 @@
 	}
 
 	.child-view {
-		height: calc(100% - 50px);
+		min-height: calc(100% - 50px);
 		opacity: 1;
 		transition: all .3s ease-out;
 	}

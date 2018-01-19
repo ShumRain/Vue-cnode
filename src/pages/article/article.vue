@@ -20,7 +20,7 @@
 		</div>
 		<div class="article-comment">
 			<div class="comment-title">
-				<span>评论区</span><span class="comment-count">{{ article.reply_count }}</span>
+				<h3>评论区<span class="comment-count">{{ article.reply_count }}</span></h3>
 			</div>
 			<div class="comment-item" v-for="reply of article.replies" :key="reply.id">
 				<router-link :to="{name: 'userRoute', params: {loginname: reply.author.loginname}}" class="avatar"><img :src="reply.author.avatar_url"></router-link>
@@ -32,15 +32,28 @@
 					</div>
 					<div v-html="reply.content" class="comment-body"></div>
 					<div class="comment-footer">
-						<a href="javascript:;" @click="clickUp">点赞<span v-show="reply.ups.length > 0">{{ reply.ups.length }}</span></a>
+						<a href="javascript:;" @click="clickUp(reply.id)">
+							点赞
+							<span v-show="reply.ups.length > 0">{{ reply.ups.length }}</span>
+							</a>
 						<div v-if="userInfo.loginname">
 							<span class="point"></span>
-							<a href="javascript:;"><span>回复</span></a>
+							<a href="javascript:;" @click="addReply(reply.id, reply.author.loginname)"><span>回复</span></a>
 						</div>
 					</div>
+					<form class="comment-box" v-if="curReplyId === reply.id">
+						<h3>发表评论</h3>
+						<textarea placeholder="开始讨论…" v-model="replyContent"></textarea>
+						<div><button @click.prevent="addComment(replyContent, curReplyId)">发表评论</button></div>
+					</form>
 				</div>
 			</div>
 		</div>
+		<form class="comment-box">
+			<h3>发表评论</h3>
+			<textarea placeholder="开始讨论…" v-model="commentContent"></textarea>
+			<div><button @click.prevent="addComment(commentContent, null)">发表评论</button></div>
+		</form>
 	</section>
 </template>
 
@@ -54,23 +67,17 @@
 	export default {
 		data() {
 			return {
-				article: null
+				article: null,
+				commentContent: '',
+				curReplyId: '',
+				replyContent: ''
 			}
 		},
 		beforeCreate() {
 			this.$store.commit('load')
 		},
 		created() {
-			let path = this.$route.path
-
-			this.axios.get(`https://cnodejs.org/api/v1/${path}`)
-			.then((res) => {
-				console.log(res.data.data)
-				this.article = res.data.data
-			})
-			.catch((err) => {
-				console.log('article: ' ,err)
-			})
+			this.getData()
 		},
 		updated() {
 			let blocks = Array.from(this.$el.querySelectorAll('pre'))
@@ -80,15 +87,64 @@
 		methods: {
 			getTime,
 			tabTranslate,
-			clickUp() {
-				alert('请先登录，登录后即可点赞')
+			getData() {
+				let path = this.$route.path
+
+				this.axios.get(`https://cnodejs.org/api/v1/${path}`)
+				.then((res) => {
+					console.log(res.data.data)
+					this.article = res.data.data
+				})
+				.catch((err) => {
+					console.log('article: ' ,err)
+				})
+			},
+			clickUp(replyId) {
+				if (!this.userInfo.loginname) {
+					alert('请先登录，登录后即可点赞')
+					return
+				}
+
+				this.axios.post(`https://cnodejs.org/api/v1/reply/${replyId}/ups`, {
+					accesstoken: this.userInfo.accessToken
+				})
+				.then((res) => {
+					// v-for中点赞 为了视图更新又发了一遍请求
+					// 感觉不妥
+					this.getData()
+				})
+				.catch((err) => {
+					err.response.status === 403 && alert(err.response.data.error_msg)
+					console.log('clickup: ', err)
+				})
+			},
+			addComment(commentContent, replyId) {
+				this.axios.post(`https://cnodejs.org/api/v1/topic/${this.article.id}/replies`, {
+					accesstoken: this.userInfo.accessToken,
+					content: commentContent,
+					reply_id: replyId
+				})
+				.then(res => {
+					this.getData()
+					this.commentContent = ''
+					this.curReplyId = '',
+					this.replyContent= ''
+				})
+				.catch(err => {
+					console.log('reply: ', err)
+				})
+			},
+			addReply(replyId, loginname) {
+				this.curReplyId = replyId
+				this.replyContent = '@' + loginname + ' '
 			}
 		},
 		computed: {
 			...mapState({
 				userInfo: 'userInfo'
 			})
-		}
+		},
+
 	}
 </script>
 
@@ -97,7 +153,8 @@
 
 	section {
 		width: 680px;
-		margin: 30px auto 0;
+		margin: 0 auto;
+		padding: 30px 0;
 	}
 
 	.article-header {
@@ -126,6 +183,8 @@
 
 	.article-comment {
 		padding-top: 10px;
+		border-bottom: 1px solid #d6d6d6;
+		margin-bottom: 20px;
 	}
 
 	.comment-title {
@@ -163,6 +222,9 @@
 				box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 			}
 		}
+		&>div {
+			width: 100%;
+		}
 	}
 
 	.comment-header {
@@ -199,6 +261,57 @@
 			background: #656c7a;
 		}
 
+	}
+
+	.comment-box {
+		display: flex;
+		flex-direction: column;
+		textarea {
+			width: 100%;
+			height: 120px;
+			border: 2px solid #dbdfe4;
+			position: relative;
+			border-radius: 4px;
+			outline: none;
+			padding: 10px;
+			font-size: 15px;
+			resize: none;
+			&::-webkit-input-placeholder {
+				color: #687a86;
+				font-size: 15px;
+			}
+		}
+		div {
+			width: 100%;
+			height: 36px;
+			text-align: right;
+			background: #f6f8f9;
+			border-radius: 0 0 2px 2px;
+			border: solid 2px #dbdfe4;
+			border-top: none;
+			opacity: 1;
+			position: relative;
+		}
+		button {
+			height: 38px;
+			line-height: 38px;
+			border: none;
+			outline: none;
+			background: #778289;
+			display: inline-block;
+			padding: 0 16px;
+			color: #fff;
+			border-radius: 3px;
+			font-weight: 500;
+			transition: background .2s;
+			text-shadow: none;
+			position: absolute;
+			right: -2px;
+			top: -2px;
+			&:hover {
+				background: rgba(29,47,58,.7);
+			}
+		}
 	}
 </style>
 
