@@ -149,7 +149,7 @@
 	}
 
 	.topic-item-tag.topic-top {
-		background: #407be0;
+		background: #1a65d7;
 		color: #fff;
 	}
 

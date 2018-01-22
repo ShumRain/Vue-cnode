@@ -14,10 +14,28 @@
 				<li v-if="!userInfo.loginname">
 					<a href="javascript:;" @click="goEnter">登录</a>
 				</li>
-				<li class="login" v-if="userInfo.loginname">
-					<router-link :to="{name: 'userRoute', params: {loginname: userInfo.loginname}}">
+				<li class="user" v-if="userInfo.loginname">
+					<a href="javascript:;" @click="drop = !drop">
 						<img :src="userInfo.avatar_url">
-					</router-link>
+						<span class="dropdown-icon"></span>
+					</a>
+					<transition name="dropdown">
+						<div class="drop-box" v-if="drop">
+							<ul @click="closeDrop">
+								<li>
+									<router-link :to="{name: 'userRoute', params: {loginname: userInfo.loginname}}">
+										个人中心
+									</router-link>
+								</li>
+								<li><router-link :to="{name: 'createTopicRoute'}">发布话题</router-link></li>
+								<li>
+									<router-link to="/my/message">我的消息</router-link>
+								</li>
+								<li><router-link to="/collect/shumrain">我的收藏</router-link></li>
+								<li><a href="javascript:;" @click="signOut">退出</a></li>
+							</ul>
+						</div>
+					</transition>
 				</li>
 			</ul>
 		</nav>
@@ -31,7 +49,8 @@
 	export default {
 		data() {
 			return {
-				tabs: ['good' ,'ask', 'share', 'job', 'dev']
+				tabs: ['good' ,'ask', 'share', 'job', 'dev'],
+				drop: false
 			}
 		},
 		methods: {
@@ -43,6 +62,13 @@
 						redirect: encodeURIComponent(this.$route.path)
 					}
 				})
+			},
+			signOut() {
+				window.sessionStorage.removeItem('userInfo')
+				window.location.reload()
+			},
+			closeDrop() {
+				this.drop = false
 			}
 		},
 		computed: {
@@ -95,12 +121,75 @@
 		}
 	}
 
-	.login {
+	.user {
+		display: flex;
+		align-items: center;
+		position: relative;
+
 		img {
 			width: 30px;
 			height: 30px;
 			border-radius: 50%;
 			vertical-align: middle;
 		}
+		.dropdown-icon {
+			display: inline-block;
+			width: 0;
+			height: 0;
+			vertical-align: middle;
+			content: "";
+			border: 4px solid;
+			border-right-color: transparent;
+			border-bottom-color: transparent;
+			border-left-color: transparent;
+		}
+		.drop-box {
+			width: 120px;
+			position: absolute;
+			top: calc(100% - 2px);
+			left: -50%;
+			z-index: 100;
+			padding-top: 5px;
+			padding-bottom: 5px;
+			margin-top: 2px;
+			list-style: none;
+			background-color: #fff;
+			background-clip: padding-box;
+			border: 1px solid rgba(27,31,35,0.15);
+			border-radius: 4px;
+			box-shadow: 0 3px 12px rgba(27,31,35,0.15);
+			li {
+				&:hover {
+					background: #1a65d7;
+				}	
+			}
+			a {
+				display: block;
+				padding: 4px 10px 4px 15px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				color: #586069;
+			}
+			&::before {
+				top: -16px;
+				right: calc(50% - 15px);
+				border: 8px solid transparent;
+				border-bottom-color: #fff;
+				position: absolute;
+				display: inline-block;
+				content: "";
+			}
+		}
 	}
+
+	.dropdown-enter-active, .dropdown-leave-active {
+		transition: all .3s ease-out;
+	}
+
+	.dropdown-enter, .dropdown-leave-to {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+
 </style>

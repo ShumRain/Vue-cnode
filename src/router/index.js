@@ -4,6 +4,7 @@ import Index from 'pages/index/index'
 import Article from 'pages/article/article'
 import User from 'pages/user/user'
 import Login from 'pages/login/login'
+import CreateTopic from 'pages/create-topic/create-topic'
 
 Vue.use(Router)
 
@@ -25,6 +26,10 @@ export default new Router({
 			path: '/login',
 			name: 'loginRoute',
 			component: Login
+		}, {
+			path: '/create',
+			name: 'createTopicRoute',
+			component: CreateTopic
 		}
 	],
 	scrollBehavior (to, from, savedPosition) {
