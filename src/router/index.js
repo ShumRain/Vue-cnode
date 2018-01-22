@@ -5,6 +5,8 @@ import Article from 'pages/article/article'
 import User from 'pages/user/user'
 import Login from 'pages/login/login'
 import CreateTopic from 'pages/create-topic/create-topic'
+import UserMessage from 'pages/user-message/user-message'
+import Collection from 'pages/collection/collection'
 
 Vue.use(Router)
 
@@ -30,6 +32,14 @@ export default new Router({
 			path: '/create',
 			name: 'createTopicRoute',
 			component: CreateTopic
+		}, {
+			path: '/my/message',
+			name: 'userMessageRoute',
+			component: UserMessage
+		}, {
+			path: '/user/:loginname/collections',
+			name: 'collectionRoute',
+			component: Collection
 		}
 	],
 	scrollBehavior (to, from, savedPosition) {

@@ -14,13 +14,13 @@
 				<li v-if="!userInfo.loginname">
 					<a href="javascript:;" @click="goEnter">登录</a>
 				</li>
-				<li class="user" v-if="userInfo.loginname">
-					<a href="javascript:;" @click="drop = !drop">
+				<li class="user" v-if="userInfo.loginname" @mouseenter="isDrop = true" @mouseleave="isDrop = false">
+					<a href="javascript:;">
 						<img :src="userInfo.avatar_url">
 						<span class="dropdown-icon"></span>
 					</a>
 					<transition name="dropdown">
-						<div class="drop-box" v-if="drop">
+						<div class="drop-box" v-if="isDrop">
 							<ul @click="closeDrop">
 								<li>
 									<router-link :to="{name: 'userRoute', params: {loginname: userInfo.loginname}}">
@@ -29,9 +29,12 @@
 								</li>
 								<li><router-link :to="{name: 'createTopicRoute'}">发布话题</router-link></li>
 								<li>
-									<router-link to="/my/message">我的消息</router-link>
+									<router-link :to="{name: 'userMessageRoute'}">
+										我的消息
+										<span v-if="messageCount > 0" class="message-count">{{ messageCount }}</span>
+									</router-link>
 								</li>
-								<li><router-link to="/collect/shumrain">我的收藏</router-link></li>
+								<li><router-link :to="{name: 'collectionRoute', params: {loginname: userInfo.loginname}}">我的收藏</router-link></li>
 								<li><a href="javascript:;" @click="signOut">退出</a></li>
 							</ul>
 						</div>
@@ -50,8 +53,23 @@
 		data() {
 			return {
 				tabs: ['good' ,'ask', 'share', 'job', 'dev'],
-				drop: false
+				isDrop: false,
+				messageCount: ''
 			}
+		},
+		mounted() {
+			if (!this.userInfo) return
+			this.axios.get('https://cnodejs.org/api/v1/message/count', {
+				params: {
+					accesstoken: this.userInfo.accessToken
+				}
+			})
+			.then((res) => {
+				this.messageCount = res.data.data
+			})
+			.catch((err) => {
+				console.log('messageCount: ', err)
+			})
 		},
 		methods: {
 			tabTranslate,
@@ -68,7 +86,7 @@
 				window.location.reload()
 			},
 			closeDrop() {
-				this.drop = false
+				this.isDrop = false
 			}
 		},
 		computed: {
@@ -190,6 +208,10 @@
 	.dropdown-enter, .dropdown-leave-to {
 		opacity: 0;
 		transform: translateY(-10px);
+	}
+
+	.message-count {
+		color: rgb(189, 29, 112);
 	}
 
 </style>

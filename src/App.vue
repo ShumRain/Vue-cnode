@@ -18,18 +18,13 @@
 	export default {
 		data() {
 			return {
-				transitionName: 'slide-leff'
+				transitionName: 'slide-left',
 			}
 		},
 		name: 'app',
 		components: {
 			commonHeader,
 			loading,
-		},
-		computed: {
-			...mapState({
-				isLoading: 'isLoading',
-			})
 		},
 		watch: {
 			'$route' (to, from) {
@@ -38,7 +33,12 @@
 				this.transitionName = toDepth < fromDepth ? 'slide-right' :
 				'slide-left'
 			}
-		}
+		},
+		computed: {
+			...mapState({
+				isLoading: 'isLoading',
+			})
+		},
 	}
 </script>
 
