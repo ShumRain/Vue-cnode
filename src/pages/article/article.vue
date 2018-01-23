@@ -13,6 +13,14 @@
 				<span>{{ article.visit_count }}次浏览</span>
 				<span class="point"></span>
 				<span>来自 {{ tabTranslate(article.tab) }}</span>
+				<a 
+				href="javascript:;" 
+				v-if="userInfo.loginname"
+				@click="collectionTopic(isCollect)"
+				>
+				<span class="point"></span>				
+				{{ isCollect ? '取消收藏' : '收藏' }}
+				</a>
 			</div>
 		</div>
 		<div class="article-content">
@@ -70,7 +78,9 @@
 				article: null,
 				commentContent: '',
 				curReplyId: '',
-				replyContent: ''
+				replyContent: '',
+				collections: '',
+				isCollect: ''
 			}
 		},
 		beforeCreate() {
@@ -95,6 +105,9 @@
 					console.log(res.data.data)
 					this.article = res.data.data
 				})
+				.then(() => {
+					this.checkCollect()
+				})
 				.catch((err) => {
 					console.log('article: ' ,err)
 				})
@@ -109,8 +122,6 @@
 					accesstoken: this.userInfo.accessToken
 				})
 				.then((res) => {
-					// v-for中点赞 为了视图更新又发了一遍请求
-					// 感觉不妥
 					this.getData()
 				})
 				.catch((err) => {
@@ -137,6 +148,36 @@
 			addReply(replyId, loginname) {
 				this.curReplyId = replyId
 				this.replyContent = '@' + loginname + ' '
+			},
+			checkCollect() {
+				if (!this.userInfo.loginname) return
+				this.axios.get(`https://cnodejs.org/api/v1/topic_collect/${this.userInfo.loginname}`)
+				.then((res) => {
+					this.collections = res.data.data
+					this.collections.forEach(i => {
+						i.id === this.article.id && (this.isCollect = true)
+					})
+				})
+				.catch((err) => {
+					console.log('articleCollection ', err)
+				})
+			},
+			collectionTopic(isCollect) {
+				let action = isCollect ? 'de_collect' : 'collect'
+
+				this.axios.post(`https://cnodejs.org/api/v1/topic_collect/${action}`, {
+					accesstoken: this.userInfo.accessToken,
+					topic_id:  this.article.id
+				})
+				.then((res) => {
+					this.getData()
+					res.data.success ?
+					this.isCollect = !isCollect :
+					alert('操作失败')
+				})
+				.catch((err) => {
+					console.log(err)
+				})
 			}
 		},
 		computed: {

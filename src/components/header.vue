@@ -57,8 +57,8 @@
 				messageCount: ''
 			}
 		},
-		mounted() {
-			if (!this.userInfo) return
+		updated() {
+			if (!this.userInfo || this.messageCount) return
 			this.axios.get('https://cnodejs.org/api/v1/message/count', {
 				params: {
 					accesstoken: this.userInfo.accessToken
