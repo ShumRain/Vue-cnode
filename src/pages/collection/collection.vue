@@ -31,6 +31,7 @@
 <script>
 	import getTime from 'js/getTime.js'
 	import tabTranslate from 'js/tabTranslate.js'
+	import apiprefix from 'js/apiPrefix.js'	
 	import { mapState } from 'vuex'
 
 	export default {
@@ -40,7 +41,7 @@
 			}
 		},
 		mounted() {
-			this.axios.get(`https://cnodejs.org/api/v1/topic_collect/${this.userInfo.loginname}`)
+			this.axios.get(`${apiprefix}/topic_collect/${this.userInfo.loginname}`)
 			.then((res) => {
 				console.log(res.data)
 				this.collections = res.data.data

@@ -3,9 +3,7 @@
 		<commonHeader></commonHeader>
 		<loading v-if="isLoading"></loading>
 		<transition :name="transitionName">
-			<keep-alive include="home">
 				<router-view class="child-view"></router-view>
-			</keep-alive>
 		</transition>
 	</div>
 </template>

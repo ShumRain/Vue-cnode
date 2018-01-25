@@ -47,6 +47,7 @@
 
 <script>
 	import getTime from 'js/getTime.js'
+	import apiprefix from 'js/apiPrefix.js'	
 
 	export default {
 		data() {
@@ -59,7 +60,7 @@
 		},
 		created() {
 			let path = this.$route.path
-			this.axios.get(`https://cnodejs.org/api/v1${path}`)
+			this.axios.get(`${apiprefix}${path}`)
 			.then((res) => {
 				this.user = res.data.data
 			})
@@ -71,7 +72,7 @@
 			this.$store.commit('notLoad')
 		},
 		beforeRouteUpdate(to, from, next) {
-			this.axios.get(`https://cnodejs.org/api/v1${to.path}`)
+			this.axios.get(`${apiprefix}${to.path}`)
 			.then((res) => {
 				this.user = res.data.data
 			})

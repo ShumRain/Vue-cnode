@@ -69,6 +69,7 @@
 <script>
 	import getTime from 'js/getTime.js'
 	import tabTranslate from 'js/tabTranslate.js'
+	import apiprefix from 'js/apiPrefix.js'
 	import { mapState } from 'vuex'
 	import hljs from 'highlight.js'
 
@@ -100,7 +101,7 @@
 			getData() {
 				let path = this.$route.path
 
-				this.axios.get(`https://cnodejs.org/api/v1/${path}`)
+				this.axios.get(`${apiprefix}/${path}`)
 				.then((res) => {
 					console.log(res.data.data)
 					this.article = res.data.data
@@ -118,7 +119,7 @@
 					return
 				}
 
-				this.axios.post(`https://cnodejs.org/api/v1/reply/${replyId}/ups`, {
+				this.axios.post(`${apiprefix}/reply/${replyId}/ups`, {
 					accesstoken: this.userInfo.accessToken
 				})
 				.then((res) => {
@@ -130,7 +131,7 @@
 				})
 			},
 			addComment(commentContent, replyId) {
-				this.axios.post(`https://cnodejs.org/api/v1/topic/${this.article.id}/replies`, {
+				this.axios.post(`${apiprefix}/topic/${this.article.id}/replies`, {
 					accesstoken: this.userInfo.accessToken,
 					content: commentContent,
 					reply_id: replyId
@@ -151,7 +152,7 @@
 			},
 			checkCollect() {
 				if (!this.userInfo.loginname) return
-				this.axios.get(`https://cnodejs.org/api/v1/topic_collect/${this.userInfo.loginname}`)
+				this.axios.get(`${apiprefix}/topic_collect/${this.userInfo.loginname}`)
 				.then((res) => {
 					this.collections = res.data.data
 					this.collections.forEach(i => {
@@ -165,7 +166,7 @@
 			collectionTopic(isCollect) {
 				let action = isCollect ? 'de_collect' : 'collect'
 
-				this.axios.post(`https://cnodejs.org/api/v1/topic_collect/${action}`, {
+				this.axios.post(`${apiprefix}/topic_collect/${action}`, {
 					accesstoken: this.userInfo.accessToken,
 					topic_id:  this.article.id
 				})

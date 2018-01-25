@@ -8,6 +8,8 @@
 </template>
 
 <script>
+	import apiprefix from 'js/apiPrefix.js'	
+	
 export default {
 	data() {
 		return {
@@ -23,7 +25,7 @@ export default {
 				alert('不能为空')
 				return
 			}
-			this.axios.post(`https://cnodejs.org/api/v1/accessToken`, {
+			this.axios.post(`${apiprefix}/accessToken`, {
 				accesstoken: this.accessToken
 			})
 			.then((res) => {

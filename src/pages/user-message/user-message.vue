@@ -30,8 +30,8 @@
 
 <script>
 	import { mapState } from 'vuex'
-// hasnot_read_messages
-// has_read_messages
+	import apiprefix from 'js/apiPrefix.js'
+	
 export default {
 	data() {
 		return {
@@ -39,7 +39,7 @@ export default {
 		}
 	},
 	created() {
-		this.axios.get('https://cnodejs.org/api/v1/messages', {
+		this.axios.get(`${apiprefix}/messages`, {
 			params: {
 				accesstoken: this.userInfo.accessToken,
 				mdrender: false

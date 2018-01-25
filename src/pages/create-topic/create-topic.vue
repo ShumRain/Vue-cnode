@@ -25,6 +25,7 @@
 
 <script>
 	import tabTranslate from 'js/tabTranslate.js'
+	import apiprefix from 'js/apiPrefix.js'	
 	import { mapState } from 'vuex'
 
 	export default {
@@ -55,7 +56,7 @@
 
 				this.isSubmit = true 
 
-				this.axios.post('https://cnodejs.org/api/v1/topics', {
+				this.axios.post(`${apiprefix}/topics`, {
 					accesstoken: this.userInfo.accessToken,
 					title: this.topicTitle,
 					tab: this.tabValue,

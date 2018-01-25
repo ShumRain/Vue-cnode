@@ -31,6 +31,7 @@
 <script>
 	import getTime from 'js/getTime.js'
 	import tabTranslate from 'js/tabTranslate.js'
+	import apiprefix from 'js/apiPrefix.js'
 
 	export default {
 		name: 'home',
@@ -62,7 +63,7 @@
 			tabTranslate,
 			getData(tab) {
 				this.limit += 10
-				this.axios.get('https://cnodejs.org/api/v1/topics', {
+				this.axios.get(`${apiprefix}/topics`, {
 					params: {
 						page: 1,
 						limit: this.limit,
